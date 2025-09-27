@@ -1,6 +1,24 @@
-=-Dia 12/09/2025-=
-- Começo do projeto, duvida entre fazer um projeto mais complexo utilizando python flask, ou se fazia um projeto de jogo de azar pelo terminal do compilado, após uma análise do nosso dev,
-foi decidido fazer o programa utilizando o python flask, para assim ter um programa mais completo.
+Relatório de Desenvolvimento do Projeto
 
-=-Dia 13/09/2025-= 
-- Inicio da programação do projeto,
+=-Dia 18/09/2025-=
+Início do projeto. Havia dúvida entre desenvolver um projeto mais complexo utilizando Python Flask ou criar um jogo de azar pelo 
+terminal do compilador. Após análise do desenvolvedor responsável, foi decidido desenvolver o programa utilizando Python Flask, 
+com o objetivo de criar um sistema mais completo.
+
+=-Dia 19/09/2025-=
+Início da programação do projeto. Foram encontrados diversos erros de sintaxe e problemas de conectividade. 
+Com o tempo e a realização de pesquisas apropriadas, a maioria dos erros foi solucionada.
+
+=-Dia 21/09/2025-=
+Primeira versão do projeto concluída. O HTML, CSS e JavaScript foram implementados de forma básica,
+apenas para testar o funcionamento do sistema. Houve problemas iniciais com o banco de dados e o redirecionamento das páginas.
+
+=-Dia 22/09/2025-=
+Correções realizadas no redirecionamento das páginas. Banco de dados ajustado, possibilitando o armazenamento do histórico,
+nome e saldo do usuário. Iniciou-se a melhoria do layout visual do site.
+
+=-Dia 24/09/2025-=
+Site praticamente concluído (99%), restando apenas algumas alterações básicas e ajustes simples no design visual.
+
+=-Dia 27/09/2025-=
+Site concluído, sem necessidade de alterações adicionais.
