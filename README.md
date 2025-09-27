@@ -1,4 +1,3 @@
-# Cassino
 # Projeto de Jogo de azar
 # Faculdade CDL
 
@@ -9,4 +8,10 @@
 # Função de cada membro
 - João Guilherme Borges Lins:
 
-Desenvolvedor do código, tester
+Desenvolvedor do código, tester.
+
+-
+
+-
+
+-
