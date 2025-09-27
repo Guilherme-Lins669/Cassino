@@ -8,4 +8,5 @@
 
 # Função de cada membro
 - João Guilherme Borges Lins:
+
 Desenvolvedor do código, tester
