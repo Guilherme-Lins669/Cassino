@@ -3,7 +3,8 @@
 
 - Professor: Sandro Mesquita
 
-- Grupo:
+# Grupo
+- João Guilherme Borges Lins
 
 # Função de cada membro
 - João Guilherme Borges Lins:
