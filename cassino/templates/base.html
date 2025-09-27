@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CASSINO</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div id="app">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- PLAYER_ID: quando a sessão não tiver player_id isso vira "null" no JS -->
+  <script>const PLAYER_ID = {{ session.get('player_id') | tojson }};</script>
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Roleta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🎡 Roleta</h1>
+        <p>Multiplicador: 3x (chance fixa de 15%)</p>
+        <p>Saldo: R$ <span id="saldo">{{ '%.2f'|format(saldo) }}</span></p>
+
+        <!-- O campo bet precisa se chamar "bet", e a cor escolhida "pick" -->
+        <form id="roleta-form">
+            <input type="number" name="bet" placeholder="Valor da aposta" step="0.01" required>
+            <div>
+                <label>Escolha uma cor:</label>
+                <select name="pick" required>
+                    <option value="azul">Azul</option>
+                    <option value="vermelho">Vermelho</option>
+                    <option value="preto">Preto</option>
+                </select>
+            </div>
+            <button type="submit">Rodar</button>
+        </form>
+
+        <div id="resultado"></div>
+        <p><a href="{{ url_for('lobby') }}">⬅️ Voltar ao Lobby</a></p>
+    </div>
+</body>
+</html>

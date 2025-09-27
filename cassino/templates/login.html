@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+  <main class="center">
+    <h1>CASSINO</h1>
+    <form method="POST" action="/login">
+      <input type="text" name="name" placeholder="Seu nome" required>
+      <button type="submit">Entrar</button>
+    </form>
+  </main>
+{% endblock %}

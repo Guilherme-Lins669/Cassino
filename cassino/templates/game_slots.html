@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Caça Níqueis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .reels {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            font-size: 2rem;
+        }
+        .reel {
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            background: #eee; border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🎰 Caça Níqueis</h1>
+        <p>Multiplicador: variável (ex.: 2x em triple)</p>
+        <p>Saldo: R$ <span id="saldo">{{ '%.2f'|format(saldo) }}</span></p>
+
+        <form id="caca_niqueis-form">
+            <input type="number" name="bet" placeholder="Valor da aposta" step="0.01" required>
+            <button type="submit">Girar</button>
+        </form>
+
+        <div class="reels" id="reels"></div>
+        <div id="resultado"></div>
+        <p><a href="{{ url_for('lobby') }}">⬅️ Voltar ao Lobby</a></p>
+    </div>
+
+    <script>
+        const form = document.getElementById("caca_niqueis-form");
+        const resultadoDiv = document.getElementById("resultado");
+        const reelsDiv = document.getElementById("reels");
+        const saldoSpan = document.getElementById("saldo");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const bet = formData.get("bet");
+
+            const res = await fetch("/play/caca_niqueis", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ bet })
+            });
+            const data = await res.json();
+
+            if (data.error) {
+                resultadoDiv.innerText = data.error;
+                return;
+            }
+
+            // Mostrar os reels
+            reelsDiv.innerHTML = "";
+            if (data.reels) {
+                data.reels.forEach(num => {
+                    const reel = document.createElement("div");
+                    reel.className = "reel";
+                    reel.innerText = num;
+                    reelsDiv.appendChild(reel);
+                });
+            }
+
+            resultadoDiv.innerText = data.resultado;
+            saldoSpan.innerText = data.saldo.toFixed(2);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <main class="center">
+    <h2>Bem-vindo, {{ player.name }}</h2>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="post" action="{{ url_for('deposit') }}">
+      <label>Quanto deseja depositar (R$)?</label>
+      <input name="amount" type="number" step="0.01" min="0.01" required>
+      <button type="submit">Depositar</button>
+    </form>
+    <a href="{{ url_for('index') }}">
+      <button type="button" class="btn btn-primary">⬅ Voltar</button>
+    </a>
+  </main>
+{% endblock %}

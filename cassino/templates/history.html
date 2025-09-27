@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Partidas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Histórico de {{ username }}</h1>
+        <table>
+            <tr>
+                <th>Jogo</th>
+                <th>Aposta</th>
+                <th>Payout</th>
+                <th>Saldo após</th>
+                <th>Data</th>
+            </tr>
+            {% for partida in partidas %}
+            <tr>
+                <td>{{ partida.game }}</td>
+                <td>R$ {{ '%.2f'|format(partida.bet) }}</td>
+                <td>R$ {{ '%.2f'|format(partida.payout) }}</td>
+                <td>R$ {{ '%.2f'|format(partida.balance_after) }}</td>
+                <td>{{ partida.played_at.strftime('%d/%m/%Y %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p><a href="{{ url_for('lobby') }}">⬅️ Voltar ao Lobby</a></p>
+    </div>
+</body>
+</html>

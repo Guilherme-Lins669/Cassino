@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="topbar">
+  <div class="left">
+    <!-- Botão com nome do usuário e dropdown -->
+    <div class="user-dropdown" id="userDropdown">
+      <button id="userBtn" class="user-btn">{{ username }} ▾</button>
+      <div class="dropdown-content" id="dropdownMenu" style="display:none;">
+        <button id="depositOpenBtn">💰 Depositar</button>
+        <a href="{{ url_for('logout') }}" id="logoutBtn">🚪 Sair</a>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <span>Saldo: R$ <span id="saldo">{{ '%.2f'|format(saldo) }}</span></span>
+  </div>
+</div>
+
+<main class="container">
+  <h1>Lobby de Minigames</h1>
+  <nav>
+      <a href="{{ url_for('game', game_name='foguete') }}">🚀 Foguete (0.25x)</a>
+      <a href="{{ url_for('game', game_name='campo_minado') }}">💣 Campo Minado (0.5x)</a>
+      <a href="{{ url_for('game', game_name='caca_niqueis') }}">🎰 Caça Níqueis</a>
+      <a href="{{ url_for('game', game_name='roleta') }}">🎡 Roleta (3x)</a>
+      <a href="{{ url_for('game', game_name='dados') }}">🎲 Dados (5x)</a>
+  </nav>
+
+  <p><a href="{{ url_for('history') }}">📜 Ver histórico</a></p>
+
+  <!-- Modal de depósito (não redireciona) -->
+  <div id="depositModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" id="depositClose">&times;</span>
+      <h3>Depositar</h3>
+      <p>Depósito mínimo inicial: R$ 50</p>
+      <form id="deposit-form">
+        <label for="amount">Quanto deseja depositar (R$)?</label>
+        <input id="amount" name="amount" type="number" step="0.01" min="0.01" required>
+        <button type="submit">Depositar</button>
+      </form>
+      <p id="depositError" class="error" style="display:none;"></p>
+    </div>
+  </div>
+</main>
+{% endblock %}

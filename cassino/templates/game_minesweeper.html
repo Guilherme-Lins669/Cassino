@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Campo Minado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .grid { display: grid; grid-template-columns: repeat(5, 50px); gap: 5px; margin-top: 20px; }
+        .cell {
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            background: #ccc; cursor: pointer; font-weight: bold;
+        }
+        .revealed { background: #eee; cursor: default; }
+        .bomb { background: red; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💣 Campo Minado</h1>
+        <p>Saldo: R$ <span id="saldo">{{ '%.2f'|format(saldo) }}</span></p>
+
+        <!-- Formulário para iniciar o jogo -->
+        <form id="start-form">
+            <input type="number" id="bet" name="bet" placeholder="Valor da aposta" step="0.01" required>
+            <button type="submit">Iniciar Jogo</button>
+        </form>
+
+        <div id="game"></div>
+        <div id="resultado"></div>
+        <p><a href="{{ url_for('lobby') }}">⬅️ Voltar ao Lobby</a></p>
+    </div>
+
+    <script>
+        const startForm = document.getElementById("start-form");
+        const gameDiv = document.getElementById("game");
+        const resultadoDiv = document.getElementById("resultado");
+        const saldoSpan = document.getElementById("saldo");
+
+        let active = false;
+
+        startForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const bet = document.getElementById("bet").value;
+
+            const res = await fetch("/minesweeper/start", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ bet })
+            });
+            const data = await res.json();
+
+            if (data.error) {
+                resultadoDiv.innerText = data.error;
+                return;
+            }
+
+            active = true;
+            resultadoDiv.innerText = `Jogo iniciado com aposta de R$ ${bet}`;
+            renderBoard(5); // sempre 5x5
+        });
+
+        function renderBoard(size) {
+            gameDiv.innerHTML = "";
+            gameDiv.className = "grid";
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    const cell = document.createElement("div");
+                    cell.className = "cell";
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    cell.addEventListener("click", clickCell);
+                    gameDiv.appendChild(cell);
+                }
+            }
+        }
+
+        async function clickCell(e) {
+            if (!active) return;
+            const row = e.target.dataset.row;
+            const col = e.target.dataset.col;
+
+            const res = await fetch(`/minesweeper/click/${row}/${col}`, {
+                method: "POST"
+            });
+            const data = await res.json();
+
+            if (data.error) {
+                resultadoDiv.innerText = data.error;
+                return;
+            }
+
+            if (data.result === "lost") {
+                e.target.classList.add("bomb");
+                e.target.innerText = "💣";
+                resultadoDiv.innerText = "Você perdeu! 😢";
+                saldoSpan.innerText = data.saldo.toFixed(2);
+                active = false;
+            } else if (data.result === "safe") {
+                e.target.classList.add("revealed");
+                e.target.innerText = "✔️";
+                resultadoDiv.innerText = `Célula segura! +R$ ${data.payout.toFixed(2)}`;
+                saldoSpan.innerText = data.saldo.toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>
