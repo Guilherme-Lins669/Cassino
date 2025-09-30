@@ -199,40 +199,182 @@ Cuida de fluxos críticos como: jogar, depositar, atualizar saldo e navegar pelo
 =-EXPLICANDO O CODIGO DO ARQUIVO-=
 
 ---
+## BASE.HTML
+
+## CODIGO HTML
+
+*<!doctype html>	Estrutura	Define o tipo de documento como HTML5.
+
+<html lang="pt-br">	O elemento raiz de todo o documento, definindo o idioma como Português Brasileiro.
+
+<head>		Contém informações sobre o documento que não são exibidas na página (como título, codificação e links para CSS).
+
+<meta charset="utf-8">		Define a codificação de caracteres para suportar a maioria dos idiomas.
+
+<meta name="viewport" ...>	Metadados	Configura a forma como a página deve ser exibida em diferentes dispositivos (essencial para responsividade).
+<title>CASSINO</title>		Define o texto que aparece na aba do navegador.
+
+<link rel="stylesheet" ...>	Linka o arquivo de estilo CSS (style.css) ao documento.
+
+<body>		Contém o conteúdo visível da página.
+
+<div>		Um contêiner genérico (id="app") usado para agrupar outros elementos HTML.
+
+<script>	Conteúdo	Usado para incorporar ou referenciar código JavaScript.
+
+## DEPOSIT.HTML
+
+
+{% extends 'base.html' %}
+Indica que esta página herda o layout principal definido em base.html.
+
+{% block content %}
+Início do bloco onde será colocado o conteúdo específico desta página.
+
+<main class="center">  
+Define a área principal da página e aplica a classe "center" para centralizar o conteúdo.  
+
+<h2>Bem-vindo, {{ player.name }}</h2>  
+Exibe uma saudação personalizada com o nome do jogador logado.  
+
+{% if error %}
+Verifica se existe alguma mensagem de erro a ser exibida.
+
+<p class="error">{{ error }}</p>  
+Mostra a mensagem de erro (se existir), estilizada com a classe "error".  
+
+{% endif %}
+Fecha a estrutura condicional de exibição do erro.
+
+<form method="post" action="{{ url_for('deposit') }}">  
+Cria um formulário que envia dados via POST para a rota "deposit".  
+
+<label>Quanto deseja depositar (R$)?</label>
+Exibe um texto informando o que o usuário deve preencher.
+
+<input name="amount" type="number" step="0.01" min="0.01" required>  
+Campo para digitar o valor do depósito; só aceita números positivos com duas casas decimais.  
+
+<button type="submit">Depositar</button>
+Botão que envia o formulário.
+
+</form> Marca o fim do formulário.  
+<a href="{{ url_for('index') }}">Cria um link que redireciona o usuário para a página inicial.  
+<button type="button" class="btn btn-primary">⬅ Voltar</button>
+Botão estilizado que permite voltar para a página inicial
+</a> Fecha o link da navegação.  
+</main> Fecha a seção principal da página.  
+
+{% endblock %}
+Finaliza o bloco de conteúdo iniciado anteriormente.
+
+### GAME_DICE.HTML
+
+<!DOCTYPE html>	Definição de Tipo	Define o documento como um HTML5.
+<html lang="pt-br">		O contêiner principal do documento, definindo a linguagem como Português do Brasil.
+<head>	Contém informações sobre o documento que não são exibidas na página.
+<meta charset="UTF-8">		Garante que acentos e caracteres especiais sejam exibidos corretamente.
+<title>	Título da Página	Define o título que aparece na aba ou janela do navegador.
+<link>	Estilo (CSS)	Liga o arquivo de estilo externo (style.css) para definir a aparência visual da página.
+<script defer>	Liga o arquivo JavaScript principal (main.js). O atributo defer garante que o script seja executado após todo o HTML ser carregado, sendo essencial para a lógica de AJAX.
+
+<body>	Conteúdo Visível	Contém todo o conteúdo que o usuário vê.
+<div class="container">	Layout	Um contêiner de propósito geral, usado para aplicar estilos de layout (como centralização ou largura máxima) definidos no style.css.
+<h1>	Título Principal	Exibe o título "🎲 Dados".
+<p>	Parágrafo	Usado para exibir as regras (Multiplicador) e informações de conta (Saldo).
+<span id="saldo">	Saldo Dinâmico	Um contêiner inline. O id="saldo" é crucial, pois o JavaScript (main.js) usa esse ID para atualizar o saldo em tempo real após cada aposta. O código `{{ '%.2
+
+form id="dados-form">	Formulário de Aposta	Agrupa os campos de aposta. O id="dados-form" é o alvo do JavaScript para interceptar a submissão e enviar a jogada por AJAX à rota /play/dados.
+<input type="number" name="bet" ...>	Valor da Aposta	Campo para o usuário digitar o valor em dinheiro. O name="bet" é o nome da variável enviada ao servidor.
+<label for="guess">	Rótulo	Define o texto descritivo para o campo de palpite, associado ao input com id="guess".
+<input id="guess" type="number" name="guess" ...>	Palpite da Soma	Campo para o usuário adivinhar a soma dos dados. Os atributos min="5" e max="30" restringem o valor aos limites lógicos do jogo.
+<button type="submit">	Botão de Ação	Inicia a submissão do formulário, que é então processada pelo JavaScript.
+
+<div id="resultado">	Mensagens do Jogo	Uma área vazia onde o JavaScript irá injetar dinamicamente o resultado da jogada (os números sorteados, se ganhou ou perdeu, e o prêmio).
+<a>	Hyperlink	Permite ao usuário retornar ao Lobby do cassino. O {{ url_for('lobby') }} é uma função do Jinja2 que gera o link correto para a rota de lobby do Flask.
+
+ ### GAME_MINESWEEPER.HTML
+
+<style>	Estilo do Jogo	Define o visual específico do Campo Minado. O .grid usa display: grid e grid-template-columns: repeat(5, 50px) para criar um tabuleiro perfeito de 5×5. O .cell define o tamanho e a aparência dos quadrados, e as classes .revealed e .bomb controlam as cores e cursores após o clique.
+<div class="container">	Layout	Contêiner principal para centralizar o conteúdo e aplicar o estilo geral do site.
+<p> Saldo: R$ <span id="saldo">...</span> </p>	Saldo Dinâmico	Exibe o saldo. O id="saldo" é usado pelo JavaScript para atualizar o valor após cada clique seguro ou a perda do jogo.
+
+<form id="start-form">	Início da Aposta	Este formulário não usa o main.js genérico, mas sim o script dedicado abaixo. Ele é usado apenas para coletar a aposta inicial.
+<input name="bet" ...>	Valor da Aposta	Campo onde o jogador insere o valor a ser apostado para esta rodada de Campo Minado.
+<button type="submit">	Inicia Jogo	Aciona o evento que chama a rota /minesweeper/start no backend via AJAX.
+<div id="game">	Tabuleito	É o contêiner vazio onde o JavaScript desenha o tabuleiro 5×5 quando o jogo é iniciado.
+<div id="resultado">	Mensagens	Área para exibir mensagens de status (erros de aposta, "Jogo iniciado", "Célula segura!" ou "Você perdeu!").
+
+### GAME_ROCKET.HTML
+
+<h1>Foguete</h1>	Título Principal	O nome do jogo exibido ao usuário.
+<p>Multiplicador: 0.25x</p>	Regra do Jogo	Informa ao jogador que, se ele acertar, o ganho será de 0.25 vezes o valor apostado. Este é um multiplicador baixo, típico de jogos com alta chance de acerto (50% no caso up/down).
+<span id="saldo">...</span>	Saldo Dinâmico	Exibe o saldo do jogador. O id="saldo" é o alvo do JavaScript para atualização em tempo real após cada aposta.
+
+<form id="foguete-form">	Contêiner da Aposta	Agrupa os campos de submissão. O id="foguete-form" é crucial, pois o main.js o usa para identificar o jogo (foguete) e iniciar a chamada AJAX para a rota /play/foguete.
+<input type="number" name="bet" ...>	Valor da Aposta	Campo para o usuário digitar quanto deseja apostar. O name="bet" é o nome da variável enviada ao servidor.
+<select name="predict" id="predict">	Escolha do Palpite	Permite ao usuário selecionar sua previsão (o palpite). O name="predict" envia a escolha (up ou down) para o servidor.
+<option value="up/down">	Opções	As duas únicas escolhas possíveis para o jogador, representando a aposta de 50/50.
+<button type="submit">Lançar</button>	Ação	Botão que envia o formulário e aciona a lógica da rodada no main.js.
+
+<div id="resultado">	Mensagens do Jogo	Área vazia onde o JavaScript injetará a mensagem final da rodada (ex: "Você ganhou!", o valor do payout e se o foguete subiu ou desceu).
+<a>	Hyperlink	Link para o Lobby, permitindo ao jogador retornar à página de seleção de jogos.
+
+###  GAME_ROULETTE.HTML
+
+<title>Roleta</title>	Título	Define o título que aparece na aba do navegador.
+<link rel="stylesheet" ...>	Estilo (CSS)	Liga o arquivo style.css para aplicar o estilo visual do site.
+<script src="..." defer></script>	Comportamento (JS)	Inclui o main.js. Isso permite que a submissão do formulário seja interceptada e enviada ao servidor de forma assíncrona (AJAX).
+<div class="container">	Layout	Contêiner principal para o conteúdo da página.
+
+<h1>Roleta</h1>	Título Principal	O nome do jogo.
+<p>Multiplicador: 3x (chance fixa de 15%)</p>	Regra do Jogo	Informa que, ao acertar a cor, o jogador ganha 3 vezes a aposta, mas a chance de acerto é fixa em 15% (conforme definido no app.py), independente da cor escolhida.
+<span id="saldo">...</span>	Saldo Dinâmico	O id="saldo" é o ponto onde o JavaScript (main.js) atualiza o saldo do jogador na tela após o resultado da rodada.
+
+<form id="roleta-form">	Contêiner da Aposta	Agrupa os campos de submissão. O id="roleta-form" é essencial, pois o main.js o identifica para chamar a rota /play/roleta no servidor.
+<input type="number" name="bet" ...>	Valor da Aposta	O campo onde o usuário insere a aposta. O name="bet" é o nome da variável que o servidor espera para saber o valor da aposta.
+<select name="pick" required>	Escolha da Cor	Permite ao usuário selecionar uma das opções de aposta. O name="pick" é o nome da variável enviada ao servidor, que contém o palpite do jogador (azul, vermelho ou preto).
+<option value="cor">	Opções de Aposta	As cores disponíveis para apostar.
+<button type="submit">Rodar</button>	Ação	Aciona a submissão do formulário e o início da rodada no backend, gerenciado pelo main.js.
+
+<div id="resultado">	Mensagens do Jogo	A área onde o JavaScript injetará dinamicamente o resultado da rodada (ex: "Você perdeu", "Você ganhou na cor azul!", prêmio e novo saldo).
+<a>	Hyperlink	Link para voltar ao Lobby.
+
+
+
 
 ###  `GAME_SLOTS.HTML` (Caça-Níqueis)
 
 #### CODIGO HTML
 
-* `<!DOCTYPE html>` – Define o tipo do documento (HTML5).
-* `<html lang="pt-br">` – Define idioma da página.
-* `<head>` – Contém metadados e links (CSS/JS).
-* `<meta charset="UTF-8">` – Codificação de caracteres.
-* `<title>` – Título da aba do navegador.
-* `<link rel="stylesheet">` – Importa o CSS.
-* `<style>` – Estilo específico da página.
-* `<script src="..." defer>` – Importa JS sem travar a renderização.
-* `<body>` – Conteúdo visível da página.
-* `<div class="container">` – Caixa central de layout.
-* `<h1>` – Título principal.
-* `<p>` – Texto explicativo.
-* `<form>` – Formulário de aposta.
-* `<input>` – Campo de valor da aposta.
-* `<button>` – Botão de ação (Girar).
-* `<div id="reels">` – Área dos rolos (símbolos).
-* `<div id="resultado">` – Mostra o resultado da jogada.
-* `<a href="{{ url_for('lobby') }}">` – Link para voltar ao Lobby.
+<!DOCTYPE html> – Define o tipo do documento (HTML5).
+<html lang="pt-br"> – Define idioma da página.
+<head> – Contém metadados e links (CSS/JS).
+<meta charset="UTF-8"> – Codificação de caracteres.
+<title> – Título da aba do navegador.
+<link rel="stylesheet"> – Importa o CSS.
+<style> – Estilo específico da página.
+<script src="..." defer> – Importa JS sem travar a renderização.
+<body> – Conteúdo visível da página.
+<div class="container">` – Caixa central de layout.
+<h1> – Título principal.
+<p> – Texto explicativo.
+<form> – Formulário de aposta.
+<input> – Campo de valor da aposta.
+<button> – Botão de ação (Girar).
+<div id="reels"> – Área dos rolos (símbolos).
+<div id="resultado"> – Mostra o resultado da jogada.
+<a href="{{ url_for('lobby') }}"> – Link para voltar ao Lobby.
 
----
 
 ###  `HISTORY.HTML` (Histórico de Partidas)
 
 ####  CODIGO HTML
 
-* `<table>` – Tabela para listar histórico.
-* `<tr>` – Linha da tabela.
-* `<th>` – Cabeçalho da tabela (Jogo, Aposta, etc.).
-* `<td>` – Dados de cada partida (dentro do loop `{% for partida in partidas %}`).
+<table> – Tabela para listar histórico.
+<tr> – Linha da tabela.
+<th> – Cabeçalho da tabela (Jogo, Aposta, etc.).
+<td> – Dados de cada partida (dentro do loop `{% for partida in partidas %}`).
 
 ---
 
@@ -241,23 +383,23 @@ Cuida de fluxos críticos como: jogar, depositar, atualizar saldo e navegar pelo
 * `{% extends 'base.html' %}` – Herda o layout base.
 * `{% block content %}` – Início da área de conteúdo principal.
 
-* `<div class="topbar">` – Barra superior com nome do usuário e saldo.
-* `<div class="user-dropdown">` – Dropdown com botão de depósito e logout.
-* `<nav>` – Menu de navegação para jogos.
-* `<a href="{{ url_for(...) }}">` – Links dinâmicos com Flask.
-* `<div id="depositModal">` – Janela modal para depósito.
-* `<form id="deposit-form">` – Formulário de envio de depósito.
-* `<input type="number">` – Campo de valor.
-* `<button>` – Botão "Depositar".
+<div class="topbar"> – Barra superior com nome do usuário e saldo.
+<div class="user-dropdown"> – Dropdown com botão de depósito e logout.
+<nav> – Menu de navegação para jogos.
+<a href="{{ url_for(...) }}"> – Links dinâmicos com Flask.
+<div id="depositModal"> – Janela modal para depósito.
+<form id="deposit-form"> – Formulário de envio de depósito.
+<input type="number"> – Campo de valor.
+<button> – Botão "Depositar".
 
 ---
 
 ### `LOGIN.HTML` (Tela de Login)
 ## CODIGO HTML
 
-* `<form method="POST" action="/login">` – Formulário que envia nome via POST.
-* `<input type="text" name="name">` – Campo de entrada do nome.
-* `<button>` – Botão de envio ("Entrar").
+<form method="POST" action="/login"> – Formulário que envia nome via POST.
+<input type="text" name="name"> – Campo de entrada do nome.
+<button>` – Botão de envio ("Entrar").
 
 ---
 
