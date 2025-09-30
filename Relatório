@@ -22,3 +22,168 @@ Site praticamente concluído (99%), restando apenas algumas alterações básica
 
 =-Dia 27/09/2025-=
 Site concluído, sem necessidade de alterações adicionais.
+
+=-EXPLICANDO OS ARQUIVOS-=
+
+=-BASE.HTML-=
+funciona como o esqueleto principal da aplicação web
+Ele define a estrutura comum que será usada por
+todas as páginas do site, garantindo que elementos como o
+cabeçalho, links de CSS, scripts JavaScript e configurações de responsividade sejam 
+carregados automaticamente, sem a necessidade de repetir esse código em cada página individual.
+
+=-DEPOSIT.HTML-=
+Este arquivo é um template de página específico da aplicação, utilizado para
+exibir a interface de depósito do jogador.
+Ele herda a estrutura principal do base.html e preenche o bloco de conteúdo definido ali, mantendo o layout e
+os recursos padrão do site (como estilos e scripts)
+Seu objetivo é permitir que um jogador logado informe um valor em reais (R$) para depositar em sua conta virtual. 
+A página exibe uma saudação com o nome do jogador e.
+caso haja algum erro (como uma tentativa inválida de depósito), também mostra uma mensagem de erro.
+
+=-GAME_DICE.HTML-=
+O arquivo de Dados é a interface frontend que permite ao usuário interagir com a lógica do jogo de dados.
+
+Ele é o responsável por:
+
+Exibir o saldo e as regras de pagamento.
+
+Capturar a aposta e o palpite do jogador.
+
+Comunicar esses dados ao backend (via main.js).
+
+Exibir o resultado da jogada de forma dinâmica.
+
+=-GAME_MINESWEEPER.HTML-=
+Este arquivo é a página do jogo Campo Minado dentro do cassino. Ele mostra a tela onde o 
+jogador faz uma aposta e começa a jogar, clicando em células de uma grade 5x5.
+Além disso, o arquivo já tem um pouco de JavaScript embutido, que cuida da parte interativa:
+
+Envia a aposta para o servidor.
+
+Monta o tabuleiro na tela.
+
+Lida com os cliques do jogador.
+
+Mostra se ele ganhou ou perdeu.
+
+Atualiza o saldo automaticamente.
+
+É a interface completa do jogo Campo Minado, feita para funcionar direto no navegador, 
+se comunicando com o servidor via requisições (fetch)
+
+=-GAME_ROCKET.HTML-=
+Este arquivo é a página do jogo do Foguete no cassino.
+Ele mostra uma interface onde o jogador pode:
+Ver seu saldo atual Informar um valor de aposta.
+Escolher se acha que o foguete vai subir ou descer.
+Clicar em "Lançar" para fazer a aposta.
+Depois disso, o resultado do jogo aparece na tela (se o jogador ganhou ou perdeu).
+Usa um multiplicador fixo de 0.25x (provavelmente para calcular ganhos).
+
+Carrega o estilo do site (com style.css).
+
+Carrega o JavaScript (main.js) que cuida da lógica e interações.
+
+É uma tela simples, feita para o jogador apostar rapidamente e voltar para o lobby se quiser
+
+=-GAME_ROULETTE.HTML-=
+O arquivo game_roulette.html é um template HTML é a página que permite ao jogador apostar em uma cor 
+e tentar a sorte girando a roleta. Ele combina visual, interação e comunicação com o servidor para 
+entregar uma experiência de jogo rápida e direta. Toda a lógica de validação, sorteio da cor vencedora e 
+atualização de saldo é feita no backend (Python/Flask) e retornada para essa página por meio do JavaScript.
+
+=-GAME_SLOTS.HTML-=
+ O arquivo game_slots.html é o template da página do jogo de Caça-Níqueis (ou Slots) do cassino virtual. Ele é responsável
+por mostrar ao jogador a interface onde ele pode apostar,
+girar os rolos e ver o resultado do jogo em tempo real.
+O template é escrito em HTML com o motor de templates Jinja2, que permite inserir dados dinâmicos vindos do backend Flask,
+como o saldo do jogador.
+O CSS é carregado a partir do arquivo style.css para manter a aparência visual consistente com o restante do site.
+
+A página também contém JavaScript integrado, que:
+
+Captura o valor da aposta.
+
+Envia a aposta para o servidor (backend) usando fetch() via POST na rota /play/caca_niqueis.
+
+Recebe a resposta com o resultado (os números sorteados e o saldo atualizado).
+
+Atualiza dinamicamente a tela com os rolos e o saldo, sem precisar recarregar a página.
+
+O design dos rolos é definido com classes CSS (.reels e .reel) para dar o estilo de "máquina caça-níqueis"
+
+=-HISTORY.HTML-=
+O arquivo historico.html é um template HTML que exibe o histórico de partidas do jogador no sistema de cassino online. 
+Ele mostra de forma organizada todas as apostas feitas pelo usuário, incluindo os jogos que ele jogou, os valores apostados, 
+os ganhos ou perdas, e o saldo final após cada jogada tambem Exibe o nome do jogador
+O título da página mostra “Histórico de [nome do jogador]”, deixando claro que os dados exibidos pertencem ao usuário logado.
+
+=-LOBBY.HTML-=
+O lobby.html é a tela principal do cassino, onde o jogador escolhe um jogo para jogar, 
+vê seu saldo, acessa seu histórico e faz depósitos. É uma interface organizada, 
+interativa e eficiente para centralizar a navegação dentro do sistema de minigames.
+O jogador pode digitar o valor a ser depositado e enviar diretamente, sem sair da página.
+Ao lado, o saldo do jogador aparece em reais, formatado com duas casas decimais.
+
+Apresenta os links para todos os jogos disponíveis
+
+Cada jogo é representado por um link com um ícone e o nome:
+
+Foguete 🚀
+
+Campo Minado 💣
+
+Caça Níqueis 🎰
+
+Roleta 🎡
+
+Dados 🎲
+
+=-LOGIN.HTML-=
+O arquivo login.html é o template responsável por exibir a tela de login do sistema de cassino. Ele serve como
+ponto de entrada principal da aplicação, permitindo que o usuário se identifique antes de acessar os jogos.
+Quando o usuário insere um nome e clica em "Entrar", o servidor Python, que atende a rota /login, é responsável por:
+Verificar o nome fornecido. Se o nome existir no banco de dados (cassino.db na tabela player), ele carrega a sessão do usuário
+Se o nome não existir, ele cria um novo jogador no banco de dados.
+Após a autenticação ou criação, o servidor geralmente redireciona o usuário para o Lobby de Minigames
+
+=-APP.PY-=
+app.py, é o núcleo do backend da aplicação de cassino desenvolvida com o framework Flask.
+Ele é responsável por orquestrar toda a lógica do sistema, é o ponto central do sistema, unificando a lógica de jogos, 
+controle de usuários, banco de dados e interface com o frontend.
+
+Sem ele, o projeto não conseguiria:
+
+Iniciar sessões de usuários.
+
+Gerenciar apostas e calcular resultados.
+
+Registrar partidas no histórico.
+
+Proteger rotas privadas (como o lobby).
+
+Sincronizar os dados entre servidor e interface.
+
+=-EXTENSION.PY-=
+Este arquivo define e exporta a instância principal do SQLAlchemy, 
+a ferramenta usada para conectar o Flask com o banco de dados (neste caso, SQLite).
+Ele inicializa o objeto db, que representa a conexão e os recursos do SQLAlchemy.
+Esse objeto será usado para Criar as tabelas (modelos).
+Fazer queries no banco de dados.
+Realizar inserções, atualizações e exclusões.
+
+=-MODELS.PY-=
+Este arquivo define os modelos de dados do  cassino, ou seja.
+as tabelas que serão criadas no banco de dados cassino.db com ajuda do SQLAlchemy (ORM do Flask).
+Esses modelos são usados para criar o banco de dados (com db.create_all()).
+Salvar dados persistentes das apostas consultar histórico, saldo, e estatísticas do jogador.
+Validar regras do jogo (pode apostar? saldo suficiente? etc
+
+=-CSS-=
+Este CSS cria uma interface moderna no estilo “dark mode”, com foco em:
+Legibilidade (textos claros em fundo escuro).
+Visual elegante (cores douradas e cinzas).
+Facilidade de navegação (botões grandes e responsivos).
+Clareza em tabelas (bom para histórico de jogos).
+
