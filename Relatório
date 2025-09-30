@@ -180,10 +180,160 @@ Esses modelos são usados para criar o banco de dados (com db.create_all()).
 Salvar dados persistentes das apostas consultar histórico, saldo, e estatísticas do jogador.
 Validar regras do jogo (pode apostar? saldo suficiente? etc
 
-=-CSS-=
+=-STYLE.CSS-=
 Este CSS cria uma interface moderna no estilo “dark mode”, com foco em:
 Legibilidade (textos claros em fundo escuro).
-Visual elegante (cores douradas e cinzas).
-Facilidade de navegação (botões grandes e responsivos).
+Visual DE (cores douradas e cinzas).
+FaciliTANDO de navegação (botões grandes e responsivos).
 Clareza em tabelas (bom para histórico de jogos).
+
+=-MAIN.JS-=
+Este arquivo, main.js, é o cérebro da interatividade (frontend) do seu código de cassino.
+Ele é o responsável por fazer a aplicação parecer um site moderno e fluido, utilizando AJAX (Asynchronous JavaScript and XML) para 
+se comunicar com o servidor Python (app.py) sem que a página precise recarregar.
+Deixa a interface dinâmica e moderna
+Substitui recarregamentos de página por requisições AJAX
+Garante interatividade sem travamentos
+Cuida de fluxos críticos como: jogar, depositar, atualizar saldo e navegar pelo lobby
+
+=-EXPLICANDO O CODIGO DO ARQUIVO-=
+
+---
+
+###  `GAME_SLOTS.HTML` (Caça-Níqueis)
+
+#### CODIGO HTML
+
+* `<!DOCTYPE html>` – Define o tipo do documento (HTML5).
+* `<html lang="pt-br">` – Define idioma da página.
+* `<head>` – Contém metadados e links (CSS/JS).
+* `<meta charset="UTF-8">` – Codificação de caracteres.
+* `<title>` – Título da aba do navegador.
+* `<link rel="stylesheet">` – Importa o CSS.
+* `<style>` – Estilo específico da página.
+* `<script src="..." defer>` – Importa JS sem travar a renderização.
+* `<body>` – Conteúdo visível da página.
+* `<div class="container">` – Caixa central de layout.
+* `<h1>` – Título principal.
+* `<p>` – Texto explicativo.
+* `<form>` – Formulário de aposta.
+* `<input>` – Campo de valor da aposta.
+* `<button>` – Botão de ação (Girar).
+* `<div id="reels">` – Área dos rolos (símbolos).
+* `<div id="resultado">` – Mostra o resultado da jogada.
+* `<a href="{{ url_for('lobby') }}">` – Link para voltar ao Lobby.
+
+---
+
+###  `HISTORY.HTML` (Histórico de Partidas)
+
+####  CODIGO HTML
+
+* `<table>` – Tabela para listar histórico.
+* `<tr>` – Linha da tabela.
+* `<th>` – Cabeçalho da tabela (Jogo, Aposta, etc.).
+* `<td>` – Dados de cada partida (dentro do loop `{% for partida in partidas %}`).
+
+---
+
+###  `LOBBY.HTML` (Lobby Principal)
+
+* `{% extends 'base.html' %}` – Herda o layout base.
+* `{% block content %}` – Início da área de conteúdo principal.
+
+* `<div class="topbar">` – Barra superior com nome do usuário e saldo.
+* `<div class="user-dropdown">` – Dropdown com botão de depósito e logout.
+* `<nav>` – Menu de navegação para jogos.
+* `<a href="{{ url_for(...) }}">` – Links dinâmicos com Flask.
+* `<div id="depositModal">` – Janela modal para depósito.
+* `<form id="deposit-form">` – Formulário de envio de depósito.
+* `<input type="number">` – Campo de valor.
+* `<button>` – Botão "Depositar".
+
+---
+
+### `LOGIN.HTML` (Tela de Login)
+## CODIGO HTML
+
+* `<form method="POST" action="/login">` – Formulário que envia nome via POST.
+* `<input type="text" name="name">` – Campo de entrada do nome.
+* `<button>` – Botão de envio ("Entrar").
+
+---
+
+### `STATIC/CSS/STYLE.CSS` (Estilo Visual)
+
+#### Seletores e estilos:
+
+* `body` – Fundo escuro, texto claro, centralização.
+* `.container` – Caixa com sombra, margem e bordas arredondadas.
+* `input, button` – Padding, cor, borda, radius.
+* `button:hover` – Efeito hover (destaque amarelo).
+* `table, th, td` – Layout e bordas das tabelas.
+* `nav a, a` – Links estilizados (cor, fundo, hover).
+
+---
+
+###`STATIC/JS/MAIN.JS` (JavaScript do Frontend)
+
+#### Funções:
+
+* Captura de formulários de jogos (`form[id$='-form']`).
+* Envio de apostas via `fetch()` para `/play/<game>`.
+* Atualiza saldo e resultado dinamicamente.
+* Controla:
+    - Dropdown do usuário (abrir/fechar).
+    - Modal de depósito (abrir/fechar).
+    - Envio do formulário de depósito via AJAX.
+* Atualiza `<span id="saldo">` na tela.
+* Atualiza `<div id="resultado">` com mensagem da rodada.
+
+---
+
+ ##'APP.PY` (Principal – Backend do Cassino)
+
+## Funções principais:
+
+* `@app.route(...)` – Define as rotas do servidor.
+* `request.form`, `request.get_json()` – Captura dados do frontend.
+* `session` – Gerencia a sessão do jogador (login, saldo).
+* `render_template()` – Renderiza templates HTML.
+* `redirect(url_for(...))` – Redirecionamento de página.
+* `jsonify(...)` – Resposta em JSON para o frontend (AJAX).
+* Lógica completa dos jogos:
+    - Campo Minado
+    - Caça Níqueis
+    - Dados
+    - Roleta
+    - Foguete
+* Rota de histórico, depósito, logout etc.
+
+---
+
+`MODELS.PY` (Banco de Dados – ORM com SQLAlchemy)
+
+####  Classes:
+
+* **Player** (Usuário):
+    - `id`, `name`, `balance`, `initial_deposit`, `created_at`
+    - Relacionamento com `Match` (partidas).
+* **Match** (Histórico de partidas):
+    - `id`, `player_id`, `game`, `bet`, `payout`, `balance_after`, `played_at`
+
+---
+
+ `EXTENSIONS.PY` (Integração com Banco de Dados)
+
+Código:
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
+```
+
+* Cria a instância do SQLAlchemy (`db`).
+* Usado por `app.py` e `models.py` para acessar o banco de dados (`cassino.db`).
+
+---
+
 
