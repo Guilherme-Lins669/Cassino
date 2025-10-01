@@ -12,10 +12,16 @@
 # Função de cada membro
 - João Guilherme Borges Lins:
 
-Programador do código.
+Back-End, Front-End.
 
-- Ana Cristina Moreira Silva 
+- Ana Cristina Moreira Silva
+
+Fluxograma, Front-End 
 
 - Guilherme Vasconcelos Duarte
 
+Fluxograma, JavaScript
+
 - Pedro Jonata Damasceno do Nascimento
+
+Relatório, Css
