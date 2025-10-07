@@ -33,10 +33,24 @@ document.addEventListener("DOMContentLoaded", () => {
             <p>Você apostou R$ ${Number(data.bet).toFixed(2)}</p>
             <p>Payout: R$ ${Number(data.payout).toFixed(2)}</p>
             <p>Tempo de jogo: ${data.duration || 0}s</p>
-            <button onclick="location.reload()">Jogar novamente</button>
-            <a href="/lobby">Voltar ao Lobby</a>
           `;
+
+          // 👉 Mostrar frase motivacional se o jogador perdeu
+          if (data.resultado && data.resultado.toLowerCase().includes("perdeu")) {
+            try {
+              const resp = await fetch("/motivacional");
+              const json = await resp.json();
+              const motivacionalEl = document.getElementById("motivacional");
+              if (motivacionalEl && json.frase) {
+                motivacionalEl.textContent = json.frase;
+                motivacionalEl.style.display = "block";
+              }
+            } catch (err) {
+              console.error("Erro ao buscar frase motivacional:", err);
+            }
+          }
         }
+
       } catch (error) {
         console.error(error);
         const resultadoDiv = document.getElementById("resultado");

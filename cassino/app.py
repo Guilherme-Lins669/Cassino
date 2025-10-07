@@ -371,6 +371,23 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@app.route('/motivacional')
+def motivacional():
+    frases = [
+        "Perder faz parte do jogo — o importante é continuar tentando!",
+        "Cada derrota é uma chance de voltar mais forte!",
+        "A sorte muda, mas a persistência vence sempre.",
+        "Nem sempre se ganha, mas sempre se aprende!",
+        "O próximo giro pode ser o seu momento de sorte!",
+        "Mantenha a calma e jogue com sabedoria.",
+        "A vitória é doce, mas a superação é ainda melhor.",
+        "Não desanime! Todo grande vencedor já perdeu um dia.",
+        "Mais vale um jogador paciente do que um sortudo impaciente.",
+        "Respire fundo... a sorte vai sorrir pra você na próxima!"
+    ]
+    frase = random.choice(frases)
+    return jsonify({"frase": frase})
+
 
 if __name__ == '__main__':
     app.run(debug=True)

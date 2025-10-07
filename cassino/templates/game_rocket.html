@@ -1,29 +1,32 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Foguete</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
-</head>
-<body>
-    <div class="container">
-        <h1>🚀 Foguete</h1>
-        <p>Multiplicador: 0.25x</p>
-        <p>Saldo: R$ <span id="saldo">{{ '%.2f'|format(saldo) }}</span></p>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Foguete</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 Foguete</h1>
+            <p>Multiplicador: 0.25x</p>
+            <p>Saldo: R$ <span id="saldo">{{ '%.2f'|format(saldo) }}</span></p>
 
-        <form id="foguete-form">
-            <input type="number" name="bet" placeholder="Valor da aposta" step="0.01" required>
-            <label for="predict">Aposte em:</label>
-            <select name="predict" id="predict">
-                <option value="up">Subir</option>
-                <option value="down">Descer</option>
-            </select>
-            <button type="submit">Lançar</button>
-        </form>
+            <form id="foguete-form">
+                <input type="number" name="bet" placeholder="Valor da aposta" step="0.01" required>
+                <label for="predict">Aposte em:</label>
+                <select name="predict" id="predict">
+                    <option value="up">Subir</option>
+                    <option value="down">Descer</option>
+                </select>
+                <button type="submit">Lançar</button>
+            </form>
 
-        <div id="resultado"></div>
-        <p><a href="{{ url_for('lobby') }}">⬅️ Voltar ao Lobby</a></p>
-    </div>
-</body>
-</html>
+            <div id="motivacional" style="margin-top:10px; color:#00ff99; font-style:italic; display:none;"></div>
+
+            <div id="resultado"></div>
+
+            <p><a href="{{ url_for('lobby') }}">⬅️ Voltar ao Lobby</a></p>
+        </div>
+    </body>
+    </html>
